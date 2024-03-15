@@ -9,8 +9,8 @@ const gravity = 0.5
 class Player {
     constructor() {
         this.position = {
-            x: 100,
-            y: 100
+            x:100,
+            y:100
         }
         this.velocity = {
             x:0,
@@ -36,10 +36,10 @@ class Player {
 }
 
 class Platform {
-    constructor(){
-        this.position ={
-            x:200,
-            y:100
+     constructor({x,y}) {
+        this.position = {
+            x,
+            y
         }
         this.width = 200
         this.height = 20
@@ -51,8 +51,12 @@ class Platform {
     }
 }
 
-const player = new Player()
-const platform = new Platform()
+const player = new Player() 
+const platforms = [
+    new Platform({ x: 200,y: 100}), 
+    new Platform({ x: 400,y: 200})
+
+]
 const keys = {
     right:{
         pressed: false 
@@ -66,22 +70,39 @@ function aniamte(){
     requestAnimationFrame(aniamte)
     c.clearRect(0,0, canvas.width, canvas.height)
     player.update()
-    platform.draw()
-    if(keys.right.pressed){
+    platforms.forEach((platform) => {
+         platform.draw()  
+    })
+ 
+    if(keys.right.pressed 
+        && player.position.x <500){
         player.velocity.x = 5
-    } else if (keys.left.pressed)
+    } else if (keys.left.pressed 
+        && player.position.x > 100)
         player.velocity.x = -5 
-    
-    else player.velocity.x = 0
-    
-    //platform collitions
-    if(player.position.y + player.height <= platform.position.y 
+    else{
+       player.velocity.x = 0 
+       if (keys.right.pressed){
+        platforms.forEach((platfrom) => {
+            platfrom.position.x -= 5
+       })
+      
+       } else if (keys.left.pressed){
+        platforms.forEach((platfrom) => {
+            platfrom.position.x += 5
+       })
+      
+       }
+    } 
+    platforms.forEach((platform) => {
+       //platform collitions 
+       if(player.position.y + player.height <= platform.position.y 
         && player.position.y + player.height + player.velocity.y >= platform.position.y 
         && player.position.x + player.width >= platform.position.x 
         && player.position.x <= platform.position.x + platform.width){
         player.velocity.y = 0 
     }
-
+   })
 }
 
 aniamte()
@@ -94,7 +115,7 @@ window.addEventListener('keydown',({keyCode})=>{
             break
         case 38 :
             console.log('up')
-            player.velocity.y -= 20
+            player.velocity.y -= 10
             break
         case 40 :
             console.log('down')
