@@ -51,7 +51,11 @@ function aniamte(){
     player.update()
     if(keys.right.pressed){
         player.vellocity.x = 5
-    }
+    } else if (keys.left.pressed)
+        player.vellocity.x = -5 
+    
+    else player.vellocity.x = 0
+
 }
 
 aniamte()
