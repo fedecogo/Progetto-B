@@ -12,7 +12,7 @@ class Player {
             x: 100,
             y: 100
         }
-        this.vellocity = {
+        this.velocity = {
             x:0,
             y:1
         }
@@ -26,16 +26,33 @@ class Player {
     }   
     update(){
         this.draw() 
-        this.position.y += this.vellocity.y
-        this.position.x += this.vellocity.x
-        if(this.position.y + this.height+ this.vellocity.y <= canvas.height)
-        this.vellocity.y += gravity
+        this.position.y += this.velocity.y
+        this.position.x += this.velocity.x
+        if(this.position.y + this.height+ this.velocity.y <= canvas.height)
+        this.velocity.y += gravity
         else 
-        this.vellocity.y = 0
+        this.velocity.y = 0
+    }
+}
+
+class Platform {
+    constructor(){
+        this.position ={
+            x:200,
+            y:100
+        }
+        this.width = 200
+        this.height = 20
+    }
+    draw(){
+        c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width ,this.height
+        )
     }
 }
 
 const player = new Player()
+const platform = new Platform()
 const keys = {
     right:{
         pressed: false 
@@ -49,12 +66,21 @@ function aniamte(){
     requestAnimationFrame(aniamte)
     c.clearRect(0,0, canvas.width, canvas.height)
     player.update()
+    platform.draw()
     if(keys.right.pressed){
-        player.vellocity.x = 5
+        player.velocity.x = 5
     } else if (keys.left.pressed)
-        player.vellocity.x = -5 
+        player.velocity.x = -5 
     
-    else player.vellocity.x = 0
+    else player.velocity.x = 0
+    
+    //platform collitions
+    if(player.position.y + player.height <= platform.position.y 
+        && player.position.y + player.height + player.velocity.y >= platform.position.y 
+        && player.position.x + player.width >= platform.position.x 
+        && player.position.x <= platform.position.x + platform.width){
+        player.velocity.y = 0 
+    }
 
 }
 
@@ -68,7 +94,7 @@ window.addEventListener('keydown',({keyCode})=>{
             break
         case 38 :
             console.log('up')
-            player.vellocity.y -= 20
+            player.velocity.y -= 20
             break
         case 40 :
             console.log('down')
@@ -88,7 +114,7 @@ window.addEventListener('keyup',({keyCode})=>{
             break
         case 38 :
             console.log('up')
-            player.vellocity.y -= 20
+            player.velocity.y -= 20
             break
         case 40 :
             console.log('down')
