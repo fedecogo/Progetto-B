@@ -4,10 +4,12 @@ const c = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
-const gravity = 0.8
+const gravity = 1
+
 
 class Player {
     constructor() {
+        this.speed =15
         this.position = {
             x:100,
             y:100
@@ -30,8 +32,7 @@ class Player {
         this.position.x += this.velocity.x
         if(this.position.y + this.height+ this.velocity.y <= canvas.height)
         this.velocity.y += gravity
-        else 
-        this.velocity.y = 0
+        
     }
 }
 
@@ -65,33 +66,73 @@ class scenarioObject {
    }
 }
 
-const player = new Player()
-const platforms = []
 
-const image = new Image()
+let player = new Player()
+let platforms = []
+
+let image = new Image()
 image.onload = () => {
     platforms.push(new Platform({ x:  -20, y: 520,image}))
     platforms.push(new Platform({ x: image.width - 20, y: 520,image}))
-    platforms.push(new Platform({ x: image.width - 20 + image.width, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *2 -20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *4 -40, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *5 -40, y: 520,image}))
     // platforms.push(new Platform({ x: 200, y: 100, image }))
     // platforms.push(new Platform({ x: 400, y: 200, image }))
 }
 image.src = './img/platform.png'
 
 
-const scenarioObjects = []
+let scenarioObjects = []
 
-const imageSO = new Image()
+let imageSO = new Image()
 imageSO.src = './img/backGround.jpg'
-const imageTR = new Image()
+let imageTR = new Image()
 imageTR.src = './img/hills.png'
 imageSO.onload = () => {
-    scenarioObjects.push(new scenarioObject({x:0, y:0,image:imageSO}))
+    // scenarioObjects.push(new scenarioObject({x:0, y:0,image:imageSO}))
     scenarioObjects.push(new scenarioObject({x:0, y:250,image:imageTR}))
     scenarioObjects.push(new scenarioObject({x:250, y:300,image:imageTR}))
 }
 
 
+function init (){
+ player = new Player()
+ platforms = []
+
+ image = new Image()
+image.onload = () => {
+    platforms.push(new Platform({ x:  -20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width - 20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *2 -20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *4 -40, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *5 -40, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *7 -20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *8 -40, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *11 -40, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *12 -20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *14 -40, y: 520,image}))
+    platforms.push(new Platform({ x: image.width *15 -80, y: 520,image}))
+    
+    // platforms.push(new Platform({ x: 200, y: 100, image }))
+    // platforms.push(new Platform({ x: 400, y: 200, image }))
+}
+image.src = './img/platform.png'
+
+
+ scenarioObjects = []
+
+ imageSO = new Image()
+imageSO.src = './img/backGround.jpg'
+ imageTR = new Image()
+imageTR.src = './img/hills.png'
+imageSO.onload = () => {
+    // scenarioObjects.push(new scenarioObject({x:0, y:0,image:imageSO}))
+    scenarioObjects.push(new scenarioObject({x:0, y:250,image:imageTR}))
+    scenarioObjects.push(new scenarioObject({x:250, y:300,image:imageTR}))
+}
+
+}
 
 
 const keys = {
@@ -116,36 +157,35 @@ function aniamte(){
     })
   
      player.update()
-    if(keys.right.pressed 
-        && player.position.x <500){
-        player.velocity.x = 5
-    } else if (keys.left.pressed 
-        && player.position.x > 100)
-        player.velocity.x = -5 
+    if(keys.right.pressed && player.position.x <500){
+        player.velocity.x = player.speed
+    } else if (
+        (keys.left.pressed && player.position.x > 100 )    || 
+        (keys.left.pressed && scrollOffSet === 0 && player.position.x > 0)
+     ) { player.velocity.x = -player.speed}
     else{
        player.velocity.x = 0 
        if (keys.right.pressed){
-        scrollOffSet += 5
+        scrollOffSet += player.speed
         platforms.forEach((platfrom) => {
-            platfrom.position.x -= 5
+            platfrom.position.x -= player.speed
        })
        scenarioObjects.forEach(scenarioObject =>{
-        scenarioObject.position.x -= 2
+        scenarioObject.position.x -= player.speed *.66
        })
       
-       } else if (keys.left.pressed){
-        scrollOffSet -=5
+       } else if (keys.left.pressed && scrollOffSet > 0){
+        scrollOffSet -= player.speed
         platforms.forEach((platfrom) => {
-            platfrom.position.x += 5
+            platfrom.position.x += player.speed
         })
         scenarioObjects.forEach(scenarioObject =>{
-            scenarioObject.position.x += 2
+            scenarioObject.position.x += player.speed *.66
            })
 
        }
     } 
 
-    console.log(scrollOffSet)
     platforms.forEach((platform) => {
        //platform collitions 
        if(player.position.y + player.height <= platform.position.y 
@@ -155,8 +195,14 @@ function aniamte(){
         player.velocity.y = 0 
     }
    })
+
+   // win condition
    if(scrollOffSet > 2000){
     console.log("you win")
+   }
+   // lose condition
+   if (player.position.y >= canvas.height){
+    init()
    }
 }
 
@@ -170,7 +216,7 @@ window.addEventListener('keydown',({keyCode})=>{
             break
         case 38 :
             console.log('up')
-            player.velocity.y -= 10
+            player.velocity.y -= 20
             break
         case 40 :
             console.log('down')
@@ -190,7 +236,6 @@ window.addEventListener('keyup',({keyCode})=>{
             break
         case 38 :
             console.log('up')
-            player.velocity.y -= 20
             break
         case 40 :
             console.log('down')

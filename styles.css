@@ -1,0 +1,26 @@
+body {
+    margin: 1px;
+    overflow: hidden;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100vh;
+    min-height: 100vh;
+}
+
+canvas {
+    width: 1024px;
+    height: 576px;
+    background-repeat: repeat; 
+    background-size: cover; 
+    z-index: 2;
+}
+#bg {
+    position: fixed;
+    background-image: url('./img/cloud.gif');
+    background-size: cover;
+    background-repeat: repeat;
+    width: 1024px;
+    height: 576px;
+}
