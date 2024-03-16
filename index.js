@@ -82,10 +82,14 @@ image.src = './img/platform.png'
 const scenarioObjects = []
 
 const imageSO = new Image()
-imageSO.onload = () => {
-    scenarioObjects.push(new scenarioObject({x:0, y:0,imageSO}))
-}
 imageSO.src = './img/backGround.jpg'
+const imageTR = new Image()
+imageTR.src = './img/hills.png'
+imageSO.onload = () => {
+    scenarioObjects.push(new scenarioObject({x:0, y:0,image:imageSO}))
+    scenarioObjects.push(new scenarioObject({x:0, y:250,image:imageTR}))
+    scenarioObjects.push(new scenarioObject({x:250, y:300,image:imageTR}))
+}
 
 
 
@@ -104,12 +108,13 @@ let scrollOffSet = 0
 function aniamte(){
     requestAnimationFrame(aniamte)
     c.clearRect(0,0, canvas.width, canvas.height)
-    platforms.forEach((platform) => {
-         platform.draw()  
-    })
     scenarioObjects.forEach(scenarioObject =>{
         scenarioObject.draw()
     })
+    platforms.forEach((platform) => {
+         platform.draw()  
+    })
+  
      player.update()
     if(keys.right.pressed 
         && player.position.x <500){
@@ -124,12 +129,19 @@ function aniamte(){
         platforms.forEach((platfrom) => {
             platfrom.position.x -= 5
        })
+       scenarioObjects.forEach(scenarioObject =>{
+        scenarioObject.position.x -= 2
+       })
       
        } else if (keys.left.pressed){
         scrollOffSet -=5
         platforms.forEach((platfrom) => {
             platfrom.position.x += 5
         })
+        scenarioObjects.forEach(scenarioObject =>{
+            scenarioObject.position.x += 2
+           })
+
        }
     } 
 
