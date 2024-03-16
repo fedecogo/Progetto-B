@@ -1,10 +1,10 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+canvas.width = 1024
+canvas.height = 576
 
-const gravity = 0.5
+const gravity = 0.8
 
 class Player {
     constructor() {
@@ -36,27 +36,60 @@ class Player {
 }
 
 class Platform {
-     constructor({x,y}) {
+     constructor({x,y,image}) {
         this.position = {
             x,
             y
         }
-        this.width = 200
-        this.height = 20
+        this.image = image
+        this.width = image.width
+        this.height = image.height
     }
     draw(){
-        c.fillStyle = 'blue'
-        c.fillRect(this.position.x, this.position.y, this.width ,this.height
-        )
+        c.drawImage(this.image , this.position.x , this.position.y)
     }
 }
 
-const player = new Player() 
-const platforms = [
-    new Platform({ x: 200,y: 100}), 
-    new Platform({ x: 400,y: 200})
+class scenarioObject {
+    constructor({x,y,image}) {
+       this.position = {
+           x,
+           y
+       }
+       this.image = image
+       this.width = image.width
+       this.height = image.height
+   }
+   draw(){
+       c.drawImage(this.image , this.position.x , this.position.y)
+   }
+}
 
-]
+const player = new Player()
+const platforms = []
+
+const image = new Image()
+image.onload = () => {
+    platforms.push(new Platform({ x:  -20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width - 20, y: 520,image}))
+    platforms.push(new Platform({ x: image.width - 20 + image.width, y: 520,image}))
+    // platforms.push(new Platform({ x: 200, y: 100, image }))
+    // platforms.push(new Platform({ x: 400, y: 200, image }))
+}
+image.src = './img/platform.png'
+
+
+const scenarioObjects = []
+
+const imageSO = new Image()
+imageSO.onload = () => {
+    scenarioObjects.push(new scenarioObject({x:0, y:0,imageSO}))
+}
+imageSO.src = './img/backGround.jpg'
+
+
+
+
 const keys = {
     right:{
         pressed: false 
@@ -66,14 +99,18 @@ const keys = {
     }
 }
 
+let scrollOffSet = 0
+
 function aniamte(){
     requestAnimationFrame(aniamte)
     c.clearRect(0,0, canvas.width, canvas.height)
-    player.update()
     platforms.forEach((platform) => {
          platform.draw()  
     })
- 
+    scenarioObjects.forEach(scenarioObject =>{
+        scenarioObject.draw()
+    })
+     player.update()
     if(keys.right.pressed 
         && player.position.x <500){
         player.velocity.x = 5
@@ -83,17 +120,20 @@ function aniamte(){
     else{
        player.velocity.x = 0 
        if (keys.right.pressed){
+        scrollOffSet += 5
         platforms.forEach((platfrom) => {
             platfrom.position.x -= 5
        })
       
        } else if (keys.left.pressed){
+        scrollOffSet -=5
         platforms.forEach((platfrom) => {
             platfrom.position.x += 5
-       })
-      
+        })
        }
     } 
+
+    console.log(scrollOffSet)
     platforms.forEach((platform) => {
        //platform collitions 
        if(player.position.y + player.height <= platform.position.y 
@@ -103,6 +143,9 @@ function aniamte(){
         player.velocity.y = 0 
     }
    })
+   if(scrollOffSet > 2000){
+    console.log("you win")
+   }
 }
 
 aniamte()
