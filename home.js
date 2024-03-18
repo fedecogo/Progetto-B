@@ -16,3 +16,21 @@ function avviaGioco(){
         console.log("scegli un livello")
     }
 }
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+          document.getElementById("info").classList.add("fade-in");
+    }, 300);
+  });
+
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+          document.getElementById("titolo").classList.add("fade-in");
+    }, 700);
+  });
+
+document.addEventListener("DOMContentLoaded", function() {
+  setTimeout(function() {
+        document.getElementById("difficulty-row").classList.add("fade-in");
+        document.getElementById("start-button-row").classList.add("fade-in");
+    }, 1000);
+});

@@ -28,6 +28,7 @@ canvas {
 
 h1{
     color: white;
+    
 }
 label{
     color: white;
@@ -35,3 +36,29 @@ label{
 #btn-start{
     max-width: 300px;
 }
+
+#info {
+    position: fixed;
+    top: 0;
+    margin-top: 100px;
+  }
+  
+  #difficulty-row, #start-button-row , #titolo , #info{
+    opacity: 0;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fade-in {
+    animation: fadeIn ease 1s forwards;
+  }
+  
