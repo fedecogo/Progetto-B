@@ -5,8 +5,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 100vh;
+    /* min-width: 100vh; */
     min-height: 100vh;
+    flex-direction: column;
 }
 
 canvas {
@@ -23,4 +24,14 @@ canvas {
     background-repeat: repeat;
     width: 1024px;
     height: 576px;
+}
+
+h1{
+    color: white;
+}
+label{
+    color: white;
+}
+#btn-start{
+    max-width: 300px;
 }
