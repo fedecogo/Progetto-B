@@ -265,6 +265,8 @@ function animate() {
     // hai vinto
     if (scrollOffSet > 2000) {
         console.log("you win")
+        
+  
     }
     //hai perso 
     if (player.position.y >= canvas.height) {

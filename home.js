@@ -7,11 +7,11 @@ function avviaGioco(){
     let difficulty = document.getElementById('difficulty').value;
     console.log(difficulty)
     if (difficulty === 'facile') {
-        window.location.href = 'index.html'
+        window.location.href = 'easy.html'
     }else if (difficulty === 'medio'){
-        window.location.href = ''
+        window.location.href = 'medium.html'
     } else if  (difficulty === 'difficile'){
-        window.location.href = ''
+        window.location.href = 'hard.html'
     } else {
         console.log("scegli un livello")
     }
