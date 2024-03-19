@@ -21,6 +21,7 @@ PlayerStandLeft.src = './img/PlayerStandLeft.png'
 class Player {
     constructor() {
         this.speed = 15
+        this.jumpCount = 0;
         this.position = {
             x: 100,
             y: 100
@@ -50,6 +51,12 @@ class Player {
         this.currentPlayer = this.players.stand.right
         this.currentCropWidth = 177
     }
+    jump() {
+        if (this.jumpCount < 1) { 
+            this.velocity.y -= 20; 
+            this.jumpCount++; 
+        }
+    }
     draw() {
         c.drawImage(
             this.currentPlayer,
@@ -63,8 +70,8 @@ class Player {
             this.height)
     }
     update() {
-        this.frame++
-
+        this.frame++;
+    
         if (this.frame > 59 &&
             (this.currentPlayer === this.players.stand.right ||
                 this.currentPlayer === this.players.stand.left))
@@ -73,13 +80,30 @@ class Player {
             (this.currentPlayer === this.players.run.right ||
                 this.currentPlayer === this.players.run.left))
             this.frame = 0
-
-        this.draw()
-        this.position.y += this.velocity.y
-        this.position.x += this.velocity.x
+    
+        this.draw();
+        
+        this.position.y += this.velocity.y;
+        this.position.x += this.velocity.x;
+        
         if (this.position.y + this.height + this.velocity.y <= canvas.height)
-            this.velocity.y += gravity
+            this.velocity.y += gravity;
+       let onGround = false;
+        platforms.forEach((platform) => {
+            if (
+                this.position.y + this.height <= platform.position.y &&
+                this.position.y + this.height + this.velocity.y >= platform.position.y &&
+                this.position.x + this.width >= platform.position.x &&
+                this.position.x <= platform.position.x + platform.width
+            ) {
+                onGround = true;
+            }
+        });
+       if (onGround) {
+            this.jumpCount = 0;
+        }
     }
+    
 }
 
 class Platform {
@@ -265,13 +289,12 @@ function animate() {
     // hai vinto
     if (scrollOffSet > 2000) {
         console.log("you win")
-        
-  
     }
     //hai perso 
     if (player.position.y >= canvas.height) {
         init()
         scrollOffSet = 0;
+        
     }
 }
 
@@ -280,19 +303,15 @@ animate()
 window.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
         case 37:
-            console.log('left')
             keys.left.pressed = true
             lastKey = 'left'
             break
         case 38:
-            console.log('up')
-            player.velocity.y -= 20
-            break
+            player.jump();
+            break;
         case 40:
-            console.log('down')
             break
         case 39:
-            console.log('right')
             keys.right.pressed = true
             lastKey = 'right'
             break
@@ -302,20 +321,16 @@ window.addEventListener('keydown', ({ keyCode }) => {
 window.addEventListener('keyup', ({ keyCode }) => {
     switch (keyCode) {
         case 37:
-            console.log('left')
             keys.left.pressed = false
             player.currentPlayer = player.players.stand.left
             player.currentCropWidth = player.players.stand.cropWidth
             player.width = player.players.stand.width
             break
         case 38:
-            console.log('up')
             break
         case 40:
-            console.log('down')
             break
         case 39:
-            console.log('right')
             keys.right.pressed = false
             player.currentPlayer = player.players.stand.right
             player.currentCropWidth = player.players.stand.cropWidth

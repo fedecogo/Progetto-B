@@ -8,11 +8,19 @@ body {
     /* min-width: 100vh; */
     min-height: 100vh;
     flex-direction: column;
+    background-image: url(./img/homepage-gif.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: 'Droid serif', serif;
 }
 
+
 canvas {
-    width: 1024px;
-    height: 576px;
+    width: 100%;
+    height: auto;
+    max-width: 1024px;
+    max-height: 576px;
     background-repeat: repeat; 
     background-size: cover; 
     z-index: 2;
@@ -22,14 +30,20 @@ canvas {
     background-image: url('./img/cloud.gif');
     background-size: cover;
     background-repeat: repeat;
-    width: 1024px;
-    height: 576px;
+    width: 80%;
+    height: auto;
+    max-width: 1024px;
+    max-height: 576px;
 }
 
-h1{
-    color: white;
-    
-}
+h1 { color: #ffffff; 
+  font-family: 'Droid serif', 
+  serif; font-size: 46px; 
+  font-weight: 400; 
+  font-style: italic; 
+  line-height: 44px; 
+  margin: 0 0 12px; 
+  text-align: center; }
 label{
     color: white;
 }
@@ -40,7 +54,7 @@ label{
 #info {
     position: fixed;
     top: 0;
-    margin-top: 100px;
+    margin-top: 50px;
   }
   
   #difficulty-row, #start-button-row , #titolo , #info{
